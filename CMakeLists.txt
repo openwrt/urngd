@@ -22,8 +22,11 @@ ADD_EXECUTABLE(urngd
 )
 TARGET_LINK_LIBRARIES(urngd ${ubox})
 
-# jitter RNG must not be compiled with optimizations
-SET_SOURCE_FILES_PROPERTIES(${JTEN_DIR}/jitterentropy-base.c PROPERTIES COMPILE_FLAGS -O0)
+# jitter RNG must not be compiled with optimizations, _FORTIFY_SOURCE needs optimizations
+SET_PROPERTY(
+  SOURCE ${JTEN_DIR}/jitterentropy-base.c
+  APPEND PROPERTY COMPILE_OPTIONS -U_FORTIFY_SOURCE -O0
+)
 
 INSTALL(TARGETS urngd RUNTIME DESTINATION ${CMAKE_INSTALL_SBINDIR})
 
